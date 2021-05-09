@@ -11,13 +11,13 @@ rMiddle= DefineNumber[ 8.0, Name "Parameters/rMiddle" ];
 //+
 cPoints= DefineNumber[ 199, Name "Parameters/cPoints" ];
 //+
-rPoints= DefineNumber[ 300, Name "Parameters/rPoints" ];
+rPoints= DefineNumber[ 500, Name "Parameters/rPoints" ];
 //+
 wPoints= DefineNumber[ 400, Name "Parameters/wPoints" ];
 //+
 rRatio= DefineNumber[ 1.01, Name "Parameters/rRatio" ];
 //+
-w1Ratio= DefineNumber[ 1.0, Name "Parameters/w1Ratio" ];
+w1Ratio= DefineNumber[ 1.01, Name "Parameters/w1Ratio" ];
 //+
 w2Ratio= DefineNumber[ 1.007, Name "Parameters/w2Ratio" ];
 //+
@@ -133,7 +133,7 @@ s4=news; Plane Surface(s4) = {l4};
 //+
 Transfinite Curve {c13} = wPoints Using Progression w2Ratio;
 //+
-Transfinite Curve {c14} = (cPoints+1)/2 Using Progression 1/rRatio;
+Transfinite Curve {c14} = (cPoints+1)/2;
 //+
 Transfinite Curve {c15} = wPoints Using Progression 1/w2Ratio;
 //+
@@ -197,7 +197,3 @@ Physical Surface("outer", 3) = {28, 29, 30, 22, 26, 31, 32};//out[4];
 Physical Surface("cylinder", 4) = {14, 7, 17};//out[2];
 //+
 Physical Volume("internal") = {1, 2, 3, 4, 5, 6};//out[1];//
-// This is a test
-
-
-
