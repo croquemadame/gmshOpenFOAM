@@ -9,15 +9,17 @@ rInner= DefineNumber[ 0.5, Name "Parameters/rInner" ];
 //+
 rMiddle= DefineNumber[ 8.0, Name "Parameters/rMiddle" ];
 //+
-cPoints= DefineNumber[ 99, Name "Parameters/cPoints" ];
+cPoints= DefineNumber[ 199, Name "Parameters/cPoints" ];
 //+
-rPoints= DefineNumber[ 100, Name "Parameters/rPoints" ];
+rPoints= DefineNumber[ 300, Name "Parameters/rPoints" ];
 //+
 wPoints= DefineNumber[ 400, Name "Parameters/wPoints" ];
 //+
 rRatio= DefineNumber[ 1.01, Name "Parameters/rRatio" ];
 //+
-wRatio= DefineNumber[ 1.007, Name "Parameters/wRatio" ];
+w1Ratio= DefineNumber[ 1.0, Name "Parameters/w1Ratio" ];
+//+
+w2Ratio= DefineNumber[ 1.007, Name "Parameters/w2Ratio" ];
 //+
 lc=1.0;
 //+
@@ -73,15 +75,15 @@ s1=news; Plane Surface(s1) = {l1};
 //+
 Transfinite Curve {c6} = rPoints Using Progression rRatio;
 //+
-Transfinite Curve {c9} = rPoints Using Progression 1/rRatio;
+Transfinite Curve {c9} = rPoints Using Progression 1/w1Ratio;
 //+
-Transfinite Curve {c7} = (cPoints+1)/2;
+Transfinite Curve {c7} = (cPoints+1)/2 Using Progression w1Ratio;
 //+
-Transfinite Curve {c8} = (cPoints+1)/2 Using Progression 1/rRatio;
+Transfinite Curve {c8} = (cPoints+1)/2 Using Progression 1;///rRatio;
 //+
 Transfinite Curve {c2} = cPoints;
 //+
-Transfinite Surface {s1} = {p4, p8, p10, p5};
+Transfinite Surface {s1} = {p4, p8, p5, p10};
 //+
 Recombine Surface {s1};
 //+
@@ -103,13 +105,13 @@ l3=newll; Curve Loop(l3) = {-c9, c10, c11, c12, -c4};
 //+
 s3=news; Plane Surface(s3) = {l3};
 //+
-Transfinite Curve {c10} = (cPoints+1)/2 Using Progression rRatio;
+Transfinite Curve {c10} = (cPoints+1)/2 Using Progression 1;//rRatio;
 //+
-Transfinite Curve {c11} = (cPoints+1)/2 Using Progression rRatio;
+Transfinite Curve {c11} = (cPoints+1)/2 Using Progression 1/w1Ratio;
 //+
 Transfinite Curve {c4} = cPoints;
 //+
-Transfinite Surface {s3} = {p5, p10, p7, p6};
+Transfinite Surface {s3} = {p6, p7, p5, p10};
 //+
 Recombine Surface {s3};
 //+
@@ -129,11 +131,11 @@ l4=newll; Curve Loop(l4) = {-c8, c13, c14, c15};
 //+
 s4=news; Plane Surface(s4) = {l4};
 //+
-Transfinite Curve {c13} = wPoints Using Progression wRatio;
+Transfinite Curve {c13} = wPoints Using Progression w2Ratio;
 //+
 Transfinite Curve {c14} = (cPoints+1)/2 Using Progression 1/rRatio;
 //+
-Transfinite Curve {c15} = wPoints Using Progression 1/wRatio;
+Transfinite Curve {c15} = wPoints Using Progression 1/w2Ratio;
 //+
 Transfinite Surface {s4};
 //+
@@ -147,7 +149,7 @@ ll5=newll; Curve Loop(ll5) = {-c10, -c15, c16, c17};
 //+
 s5=news; Plane Surface(s5) = {ll5};
 //+
-Transfinite Curve {c17} = wPoints  Using Progression 1/wRatio;
+Transfinite Curve {c17} = wPoints  Using Progression 1/w2Ratio;
 //+
 Transfinite Curve {c16} = (cPoints+1)/2;
 //+
@@ -194,7 +196,7 @@ Physical Surface("outer", 3) = {28, 29, 30, 22, 26, 31, 32};//out[4];
 //+
 Physical Surface("cylinder", 4) = {14, 7, 17};//out[2];
 //+
-//Physical Volume("internal") = {1, 2, 3, 4, 5, 6};//out[1];//
+Physical Volume("internal") = {1, 2, 3, 4, 5, 6};//out[1];//
 // This is a test
 
 
