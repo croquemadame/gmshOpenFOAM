@@ -3,25 +3,29 @@ SetFactory("OpenCASCADE");
 //+
 Geometry.OldNewReg=0;
 //+
-rOuter= DefineNumber[ 200.0, Name "Parameters/rOuter" ];
+rOuter= DefineNumber[ 100.0, Name "Parameters/rOuter" ]; //100
 //+
 rInner= DefineNumber[ 0.5, Name "Parameters/rInner" ];
 //+
-rMiddle= DefineNumber[ 8.0, Name "Parameters/rMiddle" ];
+rMiddle= DefineNumber[ 1.5, Name "Parameters/rMiddle" ];
 //+
-cPoints= DefineNumber[ 199, Name "Parameters/cPoints" ];
+cPoints= DefineNumber[ 121, Name "Parameters/cPoints" ];
 //+
-rPoints= DefineNumber[ 500, Name "Parameters/rPoints" ];
+rPoints= DefineNumber[ 180, Name "Parameters/rPoints" ]; //150
 //+
 wPoints= DefineNumber[ 400, Name "Parameters/wPoints" ];
 //+
-rRatio= DefineNumber[ 1.01, Name "Parameters/rRatio" ];
+rRatio= DefineNumber[ 1.02, Name "Parameters/rRatio" ]; //1.03
 //+
-w1Ratio= DefineNumber[ 1.01, Name "Parameters/w1Ratio" ];
+w1Ratio= DefineNumber[ 1.02, Name "Parameters/w1Ratio" ]; //1.002
 //+
-w2Ratio= DefineNumber[ 1.007, Name "Parameters/w2Ratio" ];
+w2Ratio= DefineNumber[ 1.001, Name "Parameters/w2Ratio" ];
+//+
+w2Length= DefineNumber[ 10, Name "Parameters/w2Length" ];
 //+
 lc=1.0;
+//+
+depth=1.0;
 //+
 p1=newp; Point(p1) = {0, 0, 0, lc};
 //+
@@ -115,11 +119,11 @@ Transfinite Surface {s3} = {p6, p7, p5, p10};
 //+
 Recombine Surface {s3};
 //+
-p12=newp; Point(p12) = {rOuter, rMiddle, 0, lc};
+p12=newp; Point(p12) = {w2Length, rMiddle, 0, lc};
 //+
-p13=newp; Point(p13) = {rOuter, 0, 0, lc};
+p13=newp; Point(p13) = {w2Length, 0, 0, lc};
 //+
-p14=newp; Point(p14) = {rOuter, -rMiddle, 0, lc};
+p14=newp; Point(p14) = {w2Length, -rMiddle, 0, lc};
 //+
 c13=newc; Curve(c13) = {p9, p12};
 //+
@@ -163,37 +167,53 @@ p16=newp; Point(p16)={rOuter, -rOuter, 0, lc};
 //+
 c18=newl; Curve(c18) = {p3, p15};
 //+
-c19=newl; Curve(c19) = {p15, p12};
+c19=newl; Curve(c19) = {p15, p16};
 //+
-c20=newl; Curve(c20) = {p14, p16};
+c20=newl; Curve(c20) = {p16, p2};
 //+
-c21=newl; Curve(c21) = {p16, p2};
+ll6=newll; Curve Loop(ll6) = {c1, c18, c19, c20};
 //+
-ll6=newll; Curve Loop(ll6) = {c1, c18, c19, -c13, -c7, -c5, -c11, -c17, c20, c21};
+ll7=newll; Curve Loop(ll7) = {c5, c7, c13, c14, c16, c17, c11};
 //+
-s6=news; Plane Surface(s6) = {ll6};
+s6=news; Plane Surface(s6) = {ll6,ll7};
 //+
-Transfinite Curve {c1} = 40;
+//Transfinite Curve {c1} = 40;
 //+
-Transfinite Curve {c18} = 20;
+//Transfinite Curve {c18} = 20;
 //+
-Transfinite Curve {c19} = 40 Using Progression 1/1.1;
+//Transfinite Curve {c19} = 40;
 //+
-Transfinite Curve {c20} = 40 Using Progression 1.1;
-//+
-Transfinite Curve {c21} = 20;
+//Transfinite Curve {c21} = 20;
 //+
 //s7=news; Plane Surface(s7)= {s1, s2, s3, s4, s5, s6};
 //+
-out[]=Extrude {0, 0, 1.0} {
+out[]=Extrude {0, 0, depth} {
   Surface{s1, s2, s3, s4, s5, s6}; Layers {1}; Recombine;
 };
 Physical Surface("bottom", 1) = {s1, s2, s3, s4, s5, s6}; //out[3];//{s7};
 //+
-Physical Surface("top", 2) = {33, 24, 27, 20,  16, 12};//out[0];
+Physical Surface("top", 2) = {32, 12, 16,  20, 24, 27};//out[0];
 //+
-Physical Surface("outer", 3) = {28, 29, 30, 22, 26, 31, 32};//out[4];
+Physical Surface("outer", 3) = { 28, 29, 30, 31};//out[4];
 //+
 Physical Surface("cylinder", 4) = {14, 7, 17};//out[2];
 //+
 Physical Volume("internal") = {1, 2, 3, 4, 5, 6};//out[1];//
+//+
+Field[1] = Distance;
+Field[1].CurvesList = {c5, c7, c13, c14, c16, c17, c11};
+Field[1].NumPointsPerCurve = 100;
+//+
+Field[2] = Threshold;
+Field[2].InField=1;
+Field[2].SizeMin = lc/30;
+Field[2].SizeMax = 10*lc;
+Field[2].DistMin = 0;
+Field[2].DistMax = rOuter;
+//+
+Background Field = 2;
+//+
+Mesh.MeshSizeExtendFromBoundary = 0;
+Mesh.MeshSizeFromPoints = 0;
+Mesh.MeshSizeFromCurvature = 0;
+
